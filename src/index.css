@@ -11,3 +11,37 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.image-carousel .carousel-item img {
+  max-height: 400px;
+  width: auto;
+  object-fit: cover;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.nav-link:hover {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.nav-link.active {
+  color: #ffffff !important;
+}
+
+.btn-primary {
+  color: #fff;
+}
+
+.btn-primary:hover {
+  color: #fff;
+}
+
+.navbar-collapse {
+  transition: all 0.5s !important;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none !important;
+}
