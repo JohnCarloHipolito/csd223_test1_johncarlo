@@ -1,4 +1,4 @@
-import {Container, Row, Col, Image} from 'react-bootstrap';
+import {Col, Container, Image, Row} from 'react-bootstrap';
 import appStore from '../images/app_store.png';
 import googlePlay from '../images/google_play.png';
 import icon_facebook from "../images/icon_facebook.png";

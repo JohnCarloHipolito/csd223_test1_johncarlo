@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Button, Container, Form} from 'react-bootstrap';
 import TransactionTable from "../components/TransactionTable";
 import {useForm} from "react-hook-form";
 import {useLocation} from "react-router-dom";
+import useStore from "../stores/store";
 
-function TransactionPage({type, accountTransaction, setAccountTransaction}) {
+function TransactionPage({type}) {
+    const {account, setAccount, transactions, setTransactions} = useStore();
     const {register, handleSubmit, reset, formState: {errors}} = useForm();
     const location = useLocation();
-    const [account, setAccount] = useState(null);
 
     useEffect(() => {
         reset();
@@ -17,12 +18,12 @@ function TransactionPage({type, accountTransaction, setAccountTransaction}) {
         setAccount(data.account);
         let latestBalance = 0;
 
-        if (accountTransaction[data.account] && accountTransaction[data.account].length > 0) {
-            latestBalance = accountTransaction[data.account][accountTransaction[data.account].length - 1].balance;
+        if (transactions[data.account] && transactions[data.account].length > 0) {
+            latestBalance = transactions[data.account][transactions[data.account].length - 1].balance;
         }
 
-        const newTransactionId = accountTransaction[data.account]
-            ? (accountTransaction[data.account].length + 1).toString()
+        const newTransactionId = transactions[data.account]
+            ? (transactions[data.account].length + 1).toString()
             : "1";
 
         switch (type) {
@@ -38,10 +39,7 @@ function TransactionPage({type, accountTransaction, setAccountTransaction}) {
                     balance: latestBalance
                 };
 
-                setAccountTransaction(prevState => ({
-                    ...prevState,
-                    [data.account]: [...prevState[data.account] || [], newTransaction]
-                }));
+                setTransactions(newTransaction);
                 break;
             case 'withdrawal':
                 const withdrawalAmount = parseFloat(data.amount);
@@ -59,18 +57,15 @@ function TransactionPage({type, accountTransaction, setAccountTransaction}) {
                     balance: latestBalance
                 };
 
-                setAccountTransaction(prevState => ({
-                    ...prevState,
-                    [data.account]: [...prevState[data.account] || [], newWithdrawalTransaction]
-                }));
+                setTransactions(newWithdrawalTransaction);
                 break;
             default:
                 break;
         }
     };
 
-    const handleAccountChange = (event) => {
-        setAccount(event.target.value);
+    const handleAccountChange = (e) => {
+        setAccount(e.target.value);
     };
 
     return (
@@ -81,8 +76,10 @@ function TransactionPage({type, accountTransaction, setAccountTransaction}) {
                     <Form onSubmit={handleSubmit(onSubmit)} className="my-2">
                         <Form.Group controlId="formAccountNumber" className="mb-4">
                             <Form.Label>Account Number</Form.Label>
-                            <Form.Control type="text" onChange={handleAccountChange} {
+                            <Form.Control type="text" {
                                 ...register('account', {
+                                    onChange: handleAccountChange,
+                                    onBlur: handleAccountChange,
                                     required: true,
                                     pattern: /^[0-9]{10}$/
                                 })}/>
@@ -107,7 +104,7 @@ function TransactionPage({type, accountTransaction, setAccountTransaction}) {
                 <div className="p-2 flex-fill">
                     <h3 className="text-center text-lg-start mb-2 text-primary">Transaction History</h3>
                     <h4 className="text-center flex-fill text-lg-start mb-2">{account}</h4>
-                    <TransactionTable key={account} account={account} accountTransaction={accountTransaction}/>
+                    <TransactionTable key={account}/>
                 </div>
             </div>
         </Container>

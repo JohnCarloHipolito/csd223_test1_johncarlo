@@ -1,7 +1,9 @@
 import {Table} from 'react-bootstrap';
+import useStore from "../stores/store";
 
-function TransactionTable({account, accountTransaction}) {
-    const transactions = [...(accountTransaction[account] || [])].reverse();
+function TransactionTable() {
+    const {account, transactions} = useStore();
+    const revTransactions = [...(transactions[account] || [])].reverse();
 
     return (
         <Table hover className="border-top border-bottom">
@@ -15,7 +17,7 @@ function TransactionTable({account, accountTransaction}) {
             </tr>
             </thead>
             <tbody>
-            {transactions.map((transaction, index) => (
+            {revTransactions.map((transaction, index) => (
                 <tr key={index}>
                     <td>{transaction.id}</td>
                     <td>{transaction.type}</td>

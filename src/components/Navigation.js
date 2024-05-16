@@ -1,9 +1,13 @@
 import React from 'react';
-import {Navbar, Nav, Container, Image} from 'react-bootstrap';
+import {Container, Image, Nav, Navbar} from 'react-bootstrap';
 import {NavLink} from 'react-router-dom';
 import logo from '../images/tangerine.png';
+import useStore from "../stores/store";
 
-function Navigation({userEmail, setUserEmail}) {
+function Navigation() {
+
+    const {userEmail, setUserEmail} = useStore();
+
     const handleLogout = () => {
         setUserEmail(null);
     };
