@@ -15,46 +15,46 @@ function Footer() {
                 <Col md={3}>
                     <h5>Resources</h5>
                     <ul>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Learning Center</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">ABM Locator</a></li>
-                        <li><a href="#">Rates</a></li>
+                        <li><a href="/">Help Center</a></li>
+                        <li><a href="/">Learning Center</a></li>
+                        <li><a href="/">Contact Us</a></li>
+                        <li><a href="/">ABM Locator</a></li>
+                        <li><a href="/">Rates</a></li>
                     </ul>
                 </Col>
                 <Col md={3}>
                     <h5>About Us</h5>
                     <ul>
-                        <li><a href="#">Who We Are</a></li>
-                        <li><a href="#">Awards</a></li>
-                        <li><a href="#">Partnerships</a></li>
-                        <li><a href="#">Careers</a></li>
+                        <li><a href="/">Who We Are</a></li>
+                        <li><a href="/">Awards</a></li>
+                        <li><a href="/">Partnerships</a></li>
+                        <li><a href="/">Careers</a></li>
                     </ul>
                 </Col>
                 <Col md={3}>
                     <h5>Connect to Us</h5>
                     <ul>
-                        <li><a href="#">Who We Are</a></li>
-                        <li><a href="#">Awards</a></li>
-                        <li><a href="#">Partnerships</a></li>
-                        <li><a href="#">Careers</a></li>
+                        <li><a href="/">Who We Are</a></li>
+                        <li><a href="/">Awards</a></li>
+                        <li><a href="/">Partnerships</a></li>
+                        <li><a href="/">Careers</a></li>
                     </ul>
                 </Col>
                 <Col md={3}>
                     <h5>Download The App</h5>
                     <ul className="list-unstyled">
-                        <li><a href="#"><Image src={appStore} alt="App Store" height="50px"/></a></li>
-                        <li><a href="#"><Image src={googlePlay} alt="Google Play" height="50px"/></a></li>
+                        <li><a href="/"><Image src={appStore} alt="App Store" height="50px"/></a></li>
+                        <li><a href="/"><Image src={googlePlay} alt="Google Play" height="50px"/></a></li>
                     </ul>
                 </Col>
             </Row>
             <Row>
                 <Col className="text-md-center mt-2">
-                    <a href="#" className="m-2"><Image src={icon_facebook} alt="Facebook" height="30px"/></a>
-                    <a href="#" className="m-2"><Image src={icon_instagram} alt="Instagram" height="30px"/></a>
-                    <a href="#" className="m-2"><Image src={icon_youtube} alt="YouTube" height="30px"/></a>
-                    <a href="#" className="m-2"><Image src={icon_tiktok} alt="TikTok" height="30px"/></a>
-                    <a href="#" className="m-2"><Image src={icon_twitter} alt="Twitter" height="30px"/></a>
+                    <a href="/" className="m-2"><Image src={icon_facebook} alt="Facebook" height="30px"/></a>
+                    <a href="/" className="m-2"><Image src={icon_instagram} alt="Instagram" height="30px"/></a>
+                    <a href="/" className="m-2"><Image src={icon_youtube} alt="YouTube" height="30px"/></a>
+                    <a href="/" className="m-2"><Image src={icon_tiktok} alt="TikTok" height="30px"/></a>
+                    <a href="/" className="m-2"><Image src={icon_twitter} alt="Twitter" height="30px"/></a>
                 </Col>
             </Row>
             <Row>

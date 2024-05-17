@@ -6,80 +6,93 @@ import {useLocation} from "react-router-dom";
 import useStore from "../stores/store";
 
 function TransactionPage({type}) {
-    const {account, setAccount, transactions, setTransactions} = useStore();
-    const {register, handleSubmit, reset, formState: {errors}} = useForm();
+    const {transactions, setTransactions} = useStore();
+    const {register, handleSubmit, watch, reset, formState: {errors}} = useForm();
+    const formFields = watch();
     const location = useLocation();
 
     useEffect(() => {
         reset();
     }, [location, reset]);
 
-    const onSubmit = (data) => {
-        setAccount(data.account);
-        let latestBalance = 0;
-
-        if (transactions[data.account] && transactions[data.account].length > 0) {
-            latestBalance = transactions[data.account][transactions[data.account].length - 1].balance;
+    const getLatestBalance = (account) => {
+        if (transactions[account] && transactions[account].length > 0) {
+            return transactions[account][transactions[account].length - 1].balance;
+        } else {
+            return 0;
         }
+    }
 
-        const newTransactionId = transactions[data.account]
-            ? (transactions[data.account].length + 1).toString()
-            : "1";
+    const generateTransactionId = (account) => {
+        return transactions[account] ? (transactions[account].length + 1).toString() : "1";
+    }
+
+    const createTransactionEntry = (type, account, amount, balance) => {
+        return {
+            id: generateTransactionId(account),
+            type: type,
+            date: new Date().toISOString().split('T')[0],
+            amount: amount,
+            balance: balance
+        };
+    }
+
+    const doDeposit = (account, amount, type) => {
+        const depositAmount = parseFloat(amount);
+        const latestBalance = getLatestBalance(account) + depositAmount;
+        const transactionEntry = createTransactionEntry(type, account, depositAmount, latestBalance);
+
+        setTransactions(account, transactionEntry);
+    }
+
+    const doWithdrawal = (account, amount, type) => {
+        const withdrawalAmount = parseFloat(amount);
+        let latestBalance = getLatestBalance(account) - withdrawalAmount;
+
+        if (latestBalance < 0) {
+            alert('Insufficient balance for withdrawal');
+            return false;
+        } else {
+            const transactionEntry = createTransactionEntry(type, account, withdrawalAmount, latestBalance);
+            setTransactions(account, transactionEntry);
+            return true;
+        }
+    }
+
+    const doTransfer = (fromAccount, toAccount, amount) => {
+        if(doWithdrawal(fromAccount, amount, 'transfer - debit')) {
+            doDeposit(toAccount, amount, 'transfer - credit');
+        }
+    }
+
+    const onSubmit = (data) => {
 
         switch (type) {
             case 'deposit':
-                const depositAmount = parseFloat(data.amount);
-                latestBalance += depositAmount;
-
-                const newTransaction = {
-                    id: newTransactionId,
-                    type: 'Deposit',
-                    date: new Date().toISOString().split('T')[0],
-                    amount: depositAmount,
-                    balance: latestBalance
-                };
-
-                setTransactions(newTransaction);
+                doDeposit(data.account, data.amount, type);
                 break;
             case 'withdrawal':
-                const withdrawalAmount = parseFloat(data.amount);
-                if (withdrawalAmount > latestBalance) {
-                    alert('Insufficient balance for withdrawal');
-                    return;
-                }
-                latestBalance -= withdrawalAmount;
-
-                const newWithdrawalTransaction = {
-                    id: newTransactionId,
-                    type: 'Withdrawal',
-                    date: new Date().toISOString().split('T')[0],
-                    amount: withdrawalAmount,
-                    balance: latestBalance
-                };
-
-                setTransactions(newWithdrawalTransaction);
+                doWithdrawal(data.account, data.amount, type);
+                break;
+            case 'transfer':
+                doTransfer(data.account, data.toAccount, data.amount)
                 break;
             default:
+                alert('Invalid transaction type');
                 break;
         }
-    };
-
-    const handleAccountChange = (e) => {
-        setAccount(e.target.value);
     };
 
     return (
         <Container>
-            <div className="d-flex gap-4 flex-column align-items-stretch flex-lg-row justify-content-lg-evenly align-items-lg-stretch m-4">
-                <div className="p-2 align-self-center" style={{width: '350px'}}>
+            <div className="d-flex gap-4 flex-column align-items-center flex-lg-row justify-content-lg-evenly align-items-lg-start m-4">
+                <div className="p-2" style={{width: '350px'}}>
                     <h3 className="text-center text-lg-start text-primary">{type.charAt(0).toUpperCase() + type.slice(1)}</h3>
                     <Form onSubmit={handleSubmit(onSubmit)} className="my-2">
                         <Form.Group controlId="formAccountNumber" className="mb-4">
-                            <Form.Label>Account Number</Form.Label>
+                            <Form.Label>{type === 'transfer' ? 'From Account Number' : 'Account Number'}</Form.Label>
                             <Form.Control type="text" {
                                 ...register('account', {
-                                    onChange: handleAccountChange,
-                                    onBlur: handleAccountChange,
                                     required: true,
                                     pattern: /^[0-9]{10}$/
                                 })}/>
@@ -96,15 +109,38 @@ function TransactionPage({type}) {
                             {errors.amount && <p className="text-danger mt-1">Valid amount is between 1 and 1000 up to two decimal places.</p>}
                         </Form.Group>
 
+                        {type === 'transfer' &&
+                            <Form.Group controlId="formToAccountNumber" className="mb-4">
+                                <Form.Label>To Account Number</Form.Label>
+                                <Form.Control type="text" {
+                                    ...register('toAccount', {
+                                        required: true,
+                                        pattern: /^[0-9]{10}$/,
+                                        validate: value => value !== formFields.account || 'To Account should not be the same as From Account'
+                                    })}/>
+                                {errors.toAccount && errors.toAccount.type === 'validate' &&
+                                    <p className="text-danger mt-1">{errors.toAccount.message}</p>}
+                                {errors.toAccount && (['required', 'pattern'].includes(errors.toAccount.type)) &&
+                                    <p className="text-danger mt-1">Account number should be 10-digit long.</p>}
+                            </Form.Group>
+                        }
+
+
                         <Button variant="primary" type="submit" className="w-100 mt-4">
                             Submit
                         </Button>
                     </Form>
                 </div>
                 <div className="p-2 flex-fill">
-                    <h3 className="text-center text-lg-start mb-2 text-primary">Transaction History</h3>
-                    <h4 className="text-center flex-fill text-lg-start mb-2">{account}</h4>
-                    <TransactionTable key={account}/>
+                    <h3 className="text-center text-lg-start mb-4 text-primary">Transaction History</h3>
+                    <h5 className="text-center flex-fill text-lg-start mb-2">{type === 'transfer' ? 'From Account: ' : 'Account: '} {formFields.account}</h5>
+                    <TransactionTable account={formFields.account} key={formFields.account}/>
+                    {type === 'transfer' &&
+                        <div className="my-4">
+                            <h5 className="text-center flex-fill text-lg-start mb-2">To Account: {formFields.toAccount}</h5>
+                            <TransactionTable account={formFields.toAccount} key={formFields.toAccount}/>
+                        </div>
+                    }
                 </div>
             </div>
         </Container>

@@ -22,6 +22,7 @@ function Navigation() {
                         <NavLink to="/" exact="true" className="nav-link">Home</NavLink>
                         {userEmail && <NavLink to="/deposit" className="nav-link">Deposit</NavLink>}
                         {userEmail && <NavLink to="/withdrawal" className="nav-link">Withdrawal</NavLink>}
+                        {userEmail && <NavLink to="/transfer" className="nav-link">E-Transfer</NavLink>}
                         {userEmail ? <NavLink to="/login" className="nav-link" onClick={handleLogout}>Logout</NavLink> :
                             <NavLink to="/login" className="nav-link">Login</NavLink>}
                     </Nav>

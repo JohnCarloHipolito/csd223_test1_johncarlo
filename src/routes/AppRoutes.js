@@ -9,8 +9,9 @@ class AppRoutes extends Component {
         return (
             <Routes>
                 <Route path="/" element={<HomePage/>}/>
-                <Route path="/withdrawal" element={<TransactionPage type="withdrawal"/>}/>
                 <Route path="/deposit" element={<TransactionPage type="deposit"/>}/>
+                <Route path="/withdrawal" element={<TransactionPage type="withdrawal"/>}/>
+                <Route path="/transfer" element={<TransactionPage type="transfer"/>}/>
                 <Route path="/login" element={<LoginPage/>}/>
             </Routes>
         );

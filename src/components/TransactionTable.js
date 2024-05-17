@@ -1,8 +1,8 @@
 import {Table} from 'react-bootstrap';
 import useStore from "../stores/store";
 
-function TransactionTable() {
-    const {account, transactions} = useStore();
+function TransactionTable({account}) {
+    const {transactions} = useStore();
     const revTransactions = [...(transactions[account] || [])].reverse();
 
     return (
@@ -22,8 +22,8 @@ function TransactionTable() {
                     <td>{transaction.id}</td>
                     <td>{transaction.type}</td>
                     <td className="text-center">{transaction.date}</td>
-                    <td className="text-end">${transaction.amount}</td>
-                    <td className="text-end">${transaction.balance}</td>
+                    <td className="text-end">${parseFloat(transaction.amount).toFixed(2)}</td>
+                    <td className="text-end">${parseFloat(transaction.balance).toFixed(2)}</td>
                 </tr>
             ))}
             </tbody>
