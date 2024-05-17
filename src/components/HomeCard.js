@@ -1,8 +1,10 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import {useNavigate} from "react-router-dom";
+import useStore from "../stores/store";
 
-function HomeCard({image, type, text, userEmail}) {
+function HomeCard({image, type, text}) {
+    const {userEmail} = useStore();
     const navigate = useNavigate();
 
     const handleClick = () => {

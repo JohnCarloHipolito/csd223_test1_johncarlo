@@ -4,7 +4,7 @@ import {Carousel} from "react-bootstrap";
 import carousel01 from '../images/carousel_02.jpg';
 import carousel02 from '../images/carousel_01.jpg';
 
-function HomePage({userEmail}) {
+function HomePage() {
     const images = [
         {src: carousel01, alt: "Deposit", caption: "Confidently save money with us."},
         {src: carousel02, alt: "Withdraw", caption: "Get your cash anytime, anywhere."},
@@ -25,8 +25,9 @@ function HomePage({userEmail}) {
                 ))}
             </Carousel>
             <div className="d-flex gap-4 flex-column align-items-center flex-lg-row justify-content-lg-evenly m-4">
-                <HomeCard type="Deposit" text="Secure Your Future, Deposit Today!" userEmail={userEmail}/>
-                <HomeCard type="Withdraw" text="Empower Your Finances, Withdraw with Confidence!" userEmail={userEmail}/>
+                <HomeCard type="Deposit" text="Secure Your Future, Deposit Today!"/>
+                <HomeCard type="Withdraw" text="Empower Your Finances, Withdraw with Confidence!"/>
+                <HomeCard type="Transfer" text="Send Money To Your Love Ones!"/>
             </div>
         </div>
     );

@@ -2,8 +2,10 @@ import React from 'react';
 import {useForm} from 'react-hook-form';
 import {Button, Form} from 'react-bootstrap';
 import {useNavigate} from "react-router-dom";
+import useStore from "../stores/store";
 
-function LoginPage({setUserEmail}) {
+function LoginPage() {
+    const {setUserEmail} = useStore();
     const {register, handleSubmit, reset, formState: {errors}} = useForm();
     const navigate = useNavigate();
 

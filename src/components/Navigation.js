@@ -1,9 +1,13 @@
 import React from 'react';
-import {Navbar, Nav, Container, Image} from 'react-bootstrap';
+import {Container, Image, Nav, Navbar} from 'react-bootstrap';
 import {NavLink} from 'react-router-dom';
 import logo from '../images/tangerine.png';
+import useStore from "../stores/store";
 
-function Navigation({userEmail, setUserEmail}) {
+function Navigation() {
+
+    const {userEmail, setUserEmail} = useStore();
+
     const handleLogout = () => {
         setUserEmail(null);
     };
@@ -18,6 +22,7 @@ function Navigation({userEmail, setUserEmail}) {
                         <NavLink to="/" exact="true" className="nav-link">Home</NavLink>
                         {userEmail && <NavLink to="/deposit" className="nav-link">Deposit</NavLink>}
                         {userEmail && <NavLink to="/withdrawal" className="nav-link">Withdrawal</NavLink>}
+                        {userEmail && <NavLink to="/transfer" className="nav-link">E-Transfer</NavLink>}
                         {userEmail ? <NavLink to="/login" className="nav-link" onClick={handleLogout}>Logout</NavLink> :
                             <NavLink to="/login" className="nav-link">Login</NavLink>}
                     </Nav>
